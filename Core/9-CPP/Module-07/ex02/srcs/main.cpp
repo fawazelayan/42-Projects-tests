@@ -1,13 +1,52 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <Array.hpp>
+#include <string>
+#include "Array.hpp"
 
 #define MAX_VAL 750
 
-// Main test harness to verify Array class template functionality and exception handling
+// Test empty array construction and size()
+void testEmptyArray(void)
+{
+	std::cout << "--- Testing Empty Array ---" << std::endl;
+	Array<int> empty;
+	std::cout << "Empty array size: " << empty.size() << std::endl;
+	try
+	{
+		std::cout << empty[0] << std::endl;
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "Expected exception on empty array access: " << e.what() << std::endl;
+	}
+}
+
+// Test Array with string types and const access
+void testStringAndConstArray(void)
+{
+	std::cout << "\n--- Testing String & Const Array ---" << std::endl;
+	Array<std::string> strArr(3);
+	strArr[0] = "Hello";
+	strArr[1] = "42";
+	strArr[2] = "Network";
+
+	std::cout << "strArr size: " << strArr.size() << std::endl;
+	for (unsigned int i = 0; i < strArr.size(); i++)
+		std::cout << "strArr[" << i << "] = " << strArr[i] << std::endl;
+
+	const Array<std::string> constStrArr(strArr);
+	std::cout << "constStrArr size: " << constStrArr.size() << std::endl;
+	std::cout << "constStrArr[1] = " << constStrArr[1] << std::endl;
+}
+
+// Subject benchmark test harness
 int main(int, char**)
 {
+	testEmptyArray();
+	testStringAndConstArray();
+
+	std::cout << "\n--- Subject Benchmark (750 elements) ---" << std::endl;
 	Array<int> numbers(MAX_VAL);
 	int* mirror = new int[MAX_VAL];
 
@@ -19,7 +58,7 @@ int main(int, char**)
 		mirror[i] = value;
 	}
 
-	//SCOPE
+	// SCOPE
 	{
 		Array<int> tmp = numbers;
 		Array<int> test(tmp);
@@ -30,6 +69,7 @@ int main(int, char**)
 		if (mirror[i] != numbers[i])
 		{
 			std::cerr << "didn't save the same value!!" << std::endl;
+			delete[] mirror;
 			return 1;
 		}
 	}
@@ -55,24 +95,7 @@ int main(int, char**)
 	for (int i = 0; i < MAX_VAL; i++)
 		numbers[i] = rand();
 
-	std::cout << "before try" << std::endl;
-	for (unsigned int i = 0; i < 3; i++)
-		std::cout << "numbers[" << i << "] = " << numbers[i] << std::endl;
-	try
-	{
-		std::cout << "after try" << std::endl;
-		for (unsigned int i = 0; i < 3; i++)
-		{
-			numbers[i] = i + 1;
-			std::cout << "numbers[" << i << "] = " << numbers[i] << std::endl;
-		}
-		int x = numbers[1];
-		std::cout << "x = " << x << std::endl;
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
 	delete[] mirror;
+	std::cout << "Subject benchmark completed successfully!" << std::endl;
 	return 0;
 }

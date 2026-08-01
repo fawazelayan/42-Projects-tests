@@ -4,33 +4,29 @@
 
 template <typename T>
 Array<T>::Array()
-{
-	this -> _size = 0;
-	this -> _elements = NULL;
-}
+	: _elements(NULL),
+		_size(0) {}
 
 template <typename T>
 Array<T>::Array(unsigned int n)
+	: _elements(NULL),
+		_size(n)
 {
-	this -> _size = n;
 	if (n > 0)
 		this -> _elements = new T[n]();
-	else
-		this -> _elements = NULL;
 }
 
 template <typename T>
 Array<T>::Array(const Array<T>& other)
+	: _elements(NULL),
+		_size(other._size)
 {
-	this -> _size = other._size;
 	if (this -> _size > 0)
 	{
 		this -> _elements = new T[this -> _size]();
 		for (unsigned int i = 0; i < this -> _size; i++)
 			this -> _elements[i] = other._elements[i];
 	}
-	else
-		this -> _elements = NULL;
 }
 
 template <typename T>
@@ -38,16 +34,16 @@ Array<T>& Array<T>::operator=(const Array<T>& other)
 {
 	if (this != &other)
 	{
-		delete[] this -> _elements;
-		this -> _size = other._size;
-		if (this -> _size > 0)
+		T* newElements = NULL;
+		if (other._size > 0)
 		{
-			this -> _elements = new T[this -> _size]();
-			for (unsigned int i = 0; i < this -> _size; i++)
-				this -> _elements[i] = other._elements[i];
+			newElements = new T[other._size]();
+			for (unsigned int i = 0; i < other._size; i++)
+				newElements[i] = other._elements[i];
 		}
-		else
-			this -> _elements = NULL;
+		delete[] this -> _elements;
+		this -> _elements = newElements;
+		this -> _size = other._size;
 	}
 	return *this;
 }

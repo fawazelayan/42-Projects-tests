@@ -1,7 +1,7 @@
 #ifndef ARRAY_HPP
 # define ARRAY_HPP
 
-# include <exception>
+#include <exception>
 
 // Class Templates
 
@@ -40,6 +40,6 @@ class Array
 // Template definitions are included here because compilers need to see the implementation
 // to instantiate the templates for specific types at compile time (compilers cannot link them
 // from a separate translation unit .cpp).
-# include "Array.tpp"
+#include "Array.tpp"
 
 #endif
