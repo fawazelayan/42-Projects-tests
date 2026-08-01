@@ -35,16 +35,15 @@ int Span::shortestSpan()
 	if (this -> elements.size() < 2)
 		throw NoSpanException();
 
-	int shortest = 0;
 	std::vector<int> sortedElements = this -> elements;
 	std::sort(sortedElements.begin(), sortedElements.end());
 
-	for (size_t i = 0; i < sortedElements.size() - 1; i++)
+	int shortest = sortedElements[1] - sortedElements[0];
+	for (size_t i = 1; i < sortedElements.size() - 1; i++)
 	{
-		if (shortest == 0)
-			shortest = sortedElements[i + 1] - sortedElements[i];
-		else if (shortest > sortedElements[i + 1] - sortedElements[i])
-			shortest = sortedElements[i + 1] - sortedElements[i];
+		int diff = sortedElements[i + 1] - sortedElements[i];
+		if (diff < shortest)
+			shortest = diff;
 	}
 	return shortest;
 }
